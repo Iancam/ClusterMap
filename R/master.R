@@ -41,11 +41,11 @@
 
 cluster_map <- function(marker_file_list, edge_cutoff = 0.1, output, cell_num_list = NULL, single_obj_list = NULL, comb_obj = NULL, comb_delim = '-', k = 5, seurat_version = 3)
 {
-	## Version check for comb delim
+	# Version check for comb delim
 	if(seurat_version == 3){
 		comb_delim = '_'
 	}
-	## match sub groups
+	# match sub groups
 	mapRes <- cluster_map_by_marker(marker_file_list, cutoff = edge_cutoff, output = output)
 
 	## pull out cell_num_list if single Seurat object list is provided.
@@ -89,6 +89,7 @@ cluster_map <- function(marker_file_list, edge_cutoff = 0.1, output, cell_num_li
 		if (!is.null(comb_obj))
 		{
 			sample_label <- as.factor(sub(paste0(comb_delim, '.*'), '', colnames(GetAssayData(object = comb_obj))))
+			
 			if (all(levels(sample_label) == names(new_group_list)) == FALSE)
 				stop("Sample label in comb_obj doesn't match names(new_group_list) or names(single_obj_list).")
 

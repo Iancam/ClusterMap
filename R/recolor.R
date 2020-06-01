@@ -59,7 +59,7 @@ recolor_s <- function(mapRes_sub, obj, output, color = NULL)
 	DimPlot(obj, label = T, label.size = 8, group.by = 'regroup',
 			reduction = "tsne",
 			cols = color[sort(as.numeric(unique(new_group)))])
-    		ggtitle(paste(toupper(output))) + 
+    		ggtitle(paste(toupper(output)))  
 		ggsave(paste0(output, '.recolor.tsne.png'))
 		ggsave(paste0(output, '.recolor.tsne.pdf'))
 
@@ -88,7 +88,7 @@ recolor_s <- function(mapRes_sub, obj, output, color = NULL)
 
 recolor_comb <- function(comb_obj, new_group_list, output, comb_delim = '-', color = NULL)
 {
-	## Change comb_delim if v3 Seurat
+	# Change comb_delim if v3 Seurat
 	if(comb_obj@version > 3){
 		comb_delim = '_'
 		print("Changed comb_delim to '_'")
