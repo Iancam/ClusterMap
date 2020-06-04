@@ -39,11 +39,16 @@
 #' @export
 
 
-cluster_map <- function(marker_file_list, edge_cutoff = 0.1, output, cell_num_list = NULL, single_obj_list = NULL, comb_obj = NULL, comb_delim = '-', k = 5, seurat_version = 3)
+cluster_map <- function(marker_file_list, edge_cutoff = 0.1, output, cell_num_list = NULL, single_obj_list = NULL, comb_obj = NULL, comb_delim = NULL, k = 5, seurat_version = 3)
 {
 	# Version check for comb delim
-	if(seurat_version == 3){
-		comb_delim = '_'
+	if(is.null(comb_delim)) {
+		if(seurat_version == 3){
+			comb_delim = '_'
+			print("Changed comb_delim to '_'")
+		} else {
+			comb_delim = '-'
+		}
 	}
 	# match sub groups
 	mapRes <- cluster_map_by_marker(marker_file_list, cutoff = edge_cutoff, output = output)

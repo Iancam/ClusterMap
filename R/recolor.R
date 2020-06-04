@@ -86,13 +86,18 @@ recolor_s <- function(mapRes_sub, obj, output, color = NULL)
 #' @export
 
 
-recolor_comb <- function(comb_obj, new_group_list, output, comb_delim = '-', color = NULL)
+recolor_comb <- function(comb_obj, new_group_list, output, comb_delim = NULL, color = NULL)
 {
 	# Change comb_delim if v3 Seurat
-	if(comb_obj@version > 3){
-		comb_delim = '_'
-		print("Changed comb_delim to '_'")
+	if(is.null(comb_delim)) {
+		if(comb_obj@version > 3){
+			comb_delim = '_'
+			print("Changed comb_delim to '_'")
+		} else {
+			comb_delim = '-'
+		}
 	}
+	
 
 	## recolor_comb will call function gg_color_hue.
 	message(paste0("recolor ", output))
