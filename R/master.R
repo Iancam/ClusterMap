@@ -41,6 +41,8 @@
 
 cluster_map <- function(marker_file_list, edge_cutoff = 0.1, output, cell_num_list = NULL, single_obj_list = NULL, comb_obj = NULL, comb_delim = NULL, k = 5, seurat_version = 3)
 {
+	marker_file_list <- sort(marker_file_list)
+	single_obj_list <- single_obj_list[order(names(single_obj_list))]
 	# Version check for comb delim
 	if(is.null(comb_delim)) {
 		if(seurat_version == 3){
