@@ -18,23 +18,21 @@
 #' @export
 
 
-recolor_s <- function(mapRes_sub, obj, output, color = NULL)
+recolor_s <- function(mapRes_sub, obj, output, single_obj_list, color = NULL)
 {
 	## recolor_s will call function gg_colr_hue.
 	message(paste0("recolor ", output))
-
 	if (is.null(names(mapRes_sub))) stop("There is no name of mapRes_sub.")
-    l <- lapply(strsplit(mapRes_sub, ';'), sub, pattern = '.*_', replacement = '')
-    new_match <- setNames(unlist(l, use.names = F), rep(names(l), lengths(l)))
-    if(single_obj_list[[1]]@version > 3){
-	print("Using Seurat v3")
-        new_group <- Idents(object = obj)
-        levels(new_group) <- names(new_match)[match(levels(Idents(object=obj)), new_match)]
-    }
-    else{
+	l <- lapply(strsplit(mapRes_sub, ';'), sub, pattern = '.*_', replacement = '')
+	new_match <- setNames(unlist(l, use.names = F), rep(names(l), lengths(l)))
+	if(single_obj_list[[1]]@version > 3){
+		print("Using Seurat v3")
+		new_group <- Idents(object = obj)
+		levels(new_group) <- names(new_match)[match(levels(Idents(object=obj)), new_match)]
+	} else {
         new_group <- obj@idents
         levels(new_group) <- names(new_match)[match(levels(obj@idents), new_match)]
-    }
+	}
     new_group <- factor(new_group, levels = names(mapRes_sub))
 	## t-SNE plot
     obj$regroup <- new_group
@@ -55,15 +53,21 @@ recolor_s <- function(mapRes_sub, obj, output, color = NULL)
   else{	
 	  print("Using Seurat v3")
 	  if (is.null(color)) color <- gg_color_hue(length(levels(new_group)))
-
-		DimPlot(obj, label = T, label.size = 8, group.by = 'regroup',
-				reduction = "tsne",
-				cols = color[sort(as.numeric(unique(new_group)))])
-					ggtitle(paste(toupper(output)))  
-			ggsave(paste0(output, '.recolor.tsne.png'))
-			ggsave(paste0(output, '.recolor.tsne.pdf'))
-
-			return(new_group)
+		lapply(knownReductions(obj), function(reduction){
+			savePlot(
+				DimPlot(
+					obj,
+					label = T,
+					label.size = 8,
+					group.by = 'regroup',
+					reduction = reduction,
+					cols = color[sort(as.numeric(unique(new_group)))])
+				+ ggtitle(paste(toupper(output))),
+				paste0(output, '.recolor.', reduction)
+			)
+		})
+		
+		return(new_group)
 	}	   
 }
 #' recolor_comb
@@ -129,10 +133,10 @@ recolor_comb <- function(comb_obj, new_group_list, output, comb_delim = NULL, co
 				paste0(output, '.recolor.tsne'))
 		return(new_group)
 	}
-	else if(comb_obj@version > 3) {
+	else if(comb_obj@version >= 3) {
 		print("Seurat v3 comb_obj")
-		knownReductions <- intersection(c("tsne", "umap"), Reductions(obj))		
-		lapply(knownReductions, function(reduction){
+		
+		lapply(knownReductions(obj), function(reduction){
 			savePlot(DimPlot(comb_obj, label = F, label.size = 8, group.by = 'samples', 
 				reduction = reduction) + ggtitle('Colored by sample'),
 				paste0(output, '.color.by.sample.', reduction)
@@ -144,7 +148,7 @@ recolor_comb <- function(comb_obj, new_group_list, output, comb_delim = NULL, co
 		comb_obj <- AddMetaData(object = comb_obj, metadata = new_group, col.name = "regroup")
 		if (is.null(color)) color  <-  gg_color_hue(length(levels(new_group)))
 		
-		lapply(knownReductions, function(reduction) {
+		lapply(knownReductions(comb_obj), function(reduction) {
 			savePlot(
 				DimPlot(
 					comb_obj,
@@ -169,6 +173,8 @@ savePlot <- function(plot, name){
 		print(plot)
 	dev.off()
 }
+
+knownReductions <- function(obj) {intersect(c("tsne", "umap"), Reductions(obj))}
 
 assignGroup <- function(new_group_list, comb_delim, comb_obj) {
 	new_group <- unlist(new_group_list)

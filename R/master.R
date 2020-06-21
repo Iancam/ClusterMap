@@ -88,7 +88,7 @@ cluster_map <- function(marker_file_list, edge_cutoff = 0.1, output, cell_num_li
 		sample_names <- names(single_obj_list)
 		new_group_list <- lapply(sample_names, function(n){
 			da <- structure(as.vector(mapRes[, n]), names = mapRes$regroup)
-			recolor_s(da, single_obj_list[[n]], n)
+			recolor_s(da, single_obj_list[[n]], n, single_obj_list)
 		})
 		names(new_group_list) <- names(single_obj_list)
 
