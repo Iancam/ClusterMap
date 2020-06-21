@@ -90,7 +90,7 @@ recolor_s <- function(mapRes_sub, obj, output, single_obj_list, color = NULL)
 #' @export
 
 
-recolor_comb <- function(comb_obj, new_group_list, output, comb_delim = NULL, color = NULL)
+recolor_comb <- function(comb_obj, new_group_list, output, single_obj_list, comb_delim = NULL, color = NULL)
 {
 	# Change comb_delim if v3 Seurat
 	if(is.null(comb_delim)) {
@@ -136,7 +136,7 @@ recolor_comb <- function(comb_obj, new_group_list, output, comb_delim = NULL, co
 	else if(comb_obj@version >= 3) {
 		print("Seurat v3 comb_obj")
 		
-		lapply(knownReductions(obj), function(reduction){
+		lapply(knownReductions(comb_obj), function(reduction){
 			savePlot(DimPlot(comb_obj, label = F, label.size = 8, group.by = 'samples', 
 				reduction = reduction) + ggtitle('Colored by sample'),
 				paste0(output, '.color.by.sample.', reduction)

@@ -100,7 +100,7 @@ cluster_map <- function(marker_file_list, edge_cutoff = 0.1, output, cell_num_li
 			if (all(levels(sample_label) == names(new_group_list)) == FALSE)
 				stop("Sample label in comb_obj doesn't match names(new_group_list) or names(single_obj_list).")
 
-			new_group_list$comb <- recolor_comb(comb_obj, new_group_list, output, comb_delim)
+			new_group_list$comb <- recolor_comb(comb_obj, new_group_list, output, single_obj_list, comb_delim)
 
 			tsne_coord <- as.data.frame(comb_obj@reductions$tsne@cell.embeddings)
 			sepa <- separability_pairwise(tsne_coord, group = new_group_list$comb, sample_label, k = k)
