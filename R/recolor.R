@@ -102,21 +102,22 @@ recolor_comb <- function(comb_obj, new_group_list, output, comb_delim = NULL, co
 	## recolor_comb will call function gg_color_hue.
 	message(paste0("recolor ", output))
 
-    sample_label <- as.factor(sub(paste0(comb_delim, '.*'), '', colnames(GetAssayData(object = comb_obj))))
+  sample_label <- as.factor(sub(paste0(comb_delim, '.*'), '', colnames(GetAssayData(object = comb_obj))))
 	message("levels(sample_label):")
 	print(levels(sample_label))
 	message("names(new_group_list):")
 	print(names(new_group_list))
-    if (all(levels(sample_label) == names(new_group_list)) == FALSE)
+  if (all(levels(sample_label) == names(new_group_list)) == FALSE)
 		stop("Sample label in comb_obj doesn't match names(new_group_list) or names(single_obj_list).")
 	names(sample_label) <- colnames(GetAssayData(object = comb_obj))
 	## color by samples
 	comb_obj$samples <- sample_label
 
 	if (comb_obj@version <3) {
-			print("Seurat v2")
-			savePlot(TSNEPlot(comb_obj, do.label = F, label.size = 8, group.by = 'samples', plot.title = 'Colored by sample'),
-			paste0(output, '.color.by.sample.tsne'))
+		print("Seurat v2")
+		savePlot(TSNEPlot(comb_obj, do.label = F, label.size = 8, group.by = 'samples', plot.title = 'Colored by sample'),
+		paste0(output, '.color.by.sample.tsne')
+		)
 		## assign new group
 		new_group <- assignGroup(new_group_list, comb_delim, comb_obj)
 		## color by new group
@@ -128,29 +129,36 @@ recolor_comb <- function(comb_obj, new_group_list, output, comb_delim = NULL, co
 				paste0(output, '.recolor.tsne'))
 		return(new_group)
 	}
-	else if(comb_obj@version > 3){
+	else if(comb_obj@version > 3) {
 		print("Seurat v3 comb_obj")
-		knownReductions = intersection(c("tsne", "umap"), Reductions(obj))		
+		knownReductions <- intersection(c("tsne", "umap"), Reductions(obj))		
 		lapply(knownReductions, function(reduction){
 			savePlot(DimPlot(comb_obj, label = F, label.size = 8, group.by = 'samples', 
-				reduction = "tsne") + ggtitle('Colored by sample'),
+				reduction = reduction) + ggtitle('Colored by sample'),
 				paste0(output, '.color.by.sample.', reduction)
 				)
-		}
+		})
 		## assign new group
 		new_group <- assignGroup(new_group_list, comb_delim, comb_obj)
 		## color by new group
 		comb_obj <- AddMetaData(object = comb_obj, metadata = new_group, col.name = "regroup")
 		if (is.null(color)) color  <-  gg_color_hue(length(levels(new_group)))
-			lapply(knownReductions, function(reduction){
-				savePlot(DimPlot(comb_obj, label = T, label.size = 8, 
-					reduction = "tsne", group.by = 'regroup',
-					cols = color[sort(as.numeric(unique(new_group)))]) 
-					+ ggtitle('Combined'),
-				paste0(output, '.recolor.tsne.png'))
-			return(new_group)
-}
 		
+		lapply(knownReductions, function(reduction) {
+			savePlot(
+				DimPlot(
+					comb_obj,
+					label = T,
+					label.size = 8, 
+					reduction = reduction,
+					group.by = 'regroup',
+					cols = color[sort(as.numeric(unique(new_group)))]) 
+				+ ggtitle('Combined'),
+				paste0(output, '.recolor.', reduction)
+			)
+			return(new_group)
+		})
+	}
 }
 
 savePlot <- function(plot, name){
@@ -162,7 +170,7 @@ savePlot <- function(plot, name){
 	dev.off()
 }
 
-assignGroup = function(new_group_list, comb_delim, comb_obj) {
+assignGroup <- function(new_group_list, comb_delim, comb_obj) {
 	new_group <- unlist(new_group_list)
 		names(new_group) <- sub('\\.', comb_delim, names(new_group))
 			new_group <- factor(new_group, levels = levels(new_group_list[[1]]))
