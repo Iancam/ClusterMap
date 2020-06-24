@@ -160,8 +160,8 @@ recolor_comb <- function(comb_obj, new_group_list, output, single_obj_list, comb
 				+ ggtitle('Combined'),
 				paste0(output, '.recolor.', reduction)
 			)
-			return(new_group)
 		})
+		return(new_group)
 	}
 }
 
@@ -178,12 +178,12 @@ knownReductions <- function(obj) {intersect(c("tsne", "umap"), Reductions(obj))}
 
 assignGroup <- function(new_group_list, comb_delim, comb_obj) {
 	new_group <- unlist(new_group_list)
-		names(new_group) <- sub('\\.', comb_delim, names(new_group))
-			new_group <- factor(new_group, levels = levels(new_group_list[[1]]))
-			new_group <- new_group[match(colnames(GetAssayData(object = comb_obj)), 
-					as.vector(names(new_group)))] ## some cells may be filtered out in combined sample.
-		if (is.na(new_group[1]))
-			stop("Cell names in comb_obj don't match cell names in new_group_list or single_obj_list. Cell names in comb_obj should be sample name and cell name in individual sample connected by comb_delim.")
+	names(new_group) <- sub('\\.', comb_delim, names(new_group))
+		new_group <- factor(new_group, levels = levels(new_group_list[[1]]))
+		new_group <- new_group[match(colnames(GetAssayData(object = comb_obj)), 
+				as.vector(names(new_group)))] ## some cells may be filtered out in combined sample.
+	if (is.na(new_group[1]))
+		stop("Cell names in comb_obj don't match cell names in new_group_list or single_obj_list. Cell names in comb_obj should be sample name and cell name in individual sample connected by comb_delim.")
 		names(new_group) <- colnames(GetAssayData(object = comb_obj))
 	new_group
 }

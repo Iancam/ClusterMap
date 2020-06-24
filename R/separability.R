@@ -4,19 +4,19 @@
 #'
 #' Calculate separability for every sample pair. The higher the more separable.
 #'
-#' @param tsne_coord
+#' @param reduction_coord
 #' A dataframe of the two dimension t-SNE coordinates of each cell in the combined sample.
 #' @param group
-#' A vector of group assignment for each cell, with the same order as the tsne_coord.
+#' A vector of group assignment for each cell, with the same order as the reduction_coord.
 #' @param sample_label
-#' A vector of sample labels for each cell, with the same order as the tsne_coord.
+#' A vector of sample labels for each cell, with the same order as the reduction_coord.
 #' @param k
 #' K-nearest neighbours used to calculate distance. DEFAULT is 5.
 #' @return A matrix of separability for each sample pair (column) and each group (row).
 #' @export
 
 
-separability_pairwise <- function(tsne_coord, group, sample_label, k = 5)
+separability_pairwise <- function(reduction_coord, group, sample_label, k = 5)
 {## separability_pairwise will call function separability_by_group.
 	message("calculate separability for each sample pair")
 	sample_pair <- combn(levels(sample_label), 2)
@@ -24,10 +24,10 @@ separability_pairwise <- function(tsne_coord, group, sample_label, k = 5)
 	res <- apply(sample_pair, 2, function(x){
 		print(x)
 		ind <- sample_label %in% x
-		tsne_coord_sub <- tsne_coord[ind, ]
+		reduction_coord_sub <- reduction_coord[ind, ]
 		group_sub <- group[ind]
 		sample_label_sub <- sample_label[ind]
-		sepa <- separability_by_group(tsne_coord_sub, group_sub, sample_label_sub, k = k)
+		sepa <- separability_by_group(reduction_coord_sub, group_sub, sample_label_sub, k = k)
 		return(sepa)
 	})
 	return(res)
@@ -37,28 +37,30 @@ separability_pairwise <- function(tsne_coord, group, sample_label, k = 5)
 #'
 #' Calculate separability for each group in a pair of samples. Internal function called by separability_pairwise.
 #'
-#' @param tsne_coord
+#' @param reduction_coord
 #' A dataframe of the two dimension t-SNE coordinates of each cell in the combined sample.
 #' @param group
-#' A vector of group assignment for each cell, with the same order as the tsne_coord.
+#' A vector of group assignment for each cell, with the same order as the reduction_coord.
 #' @param sample_label
-#' A vector of sample labels for each cell, with the same order as the tsne_coord.
+#' A vector of sample labels for each cell, with the same order as the reduction_coord.
 #' @param k
 #' K-nearest neighbours used to calculate distance. DEFAULT is 5.
 #' @return A vector of separability for each group.
 #' @export
 
-separability_by_group <- function(tsne_coord, group, sample_label, k = 5)
+separability_by_group <- function(reduction_coord, group, sample_label, k = 5)
 { ## separability_by_group will call function separability.
     p <- sapply(levels(group), function(i){
-        m <- tsne_coord[group == i, ]
-		if (nrow(m) == 0) avg_diff <- NA else
+        m <- reduction_coord[group == i, ]
+		if (nrow(m) == 0) avg_diff <- NA 
+        else
 		{
 			class_label <- sample_label[group == i]
 			avg_diff <- separability(m, class_label, k = k)
 		}
     })
-    p <- p/(max(tsne_coord[, 1]) - min(tsne_coord[, 1]))*100
+
+    p <- p/(max(reduction_coord[, 1]) - min(reduction_coord[, 1]))*100
     round(p, 2)
 }
 
@@ -69,7 +71,7 @@ separability_by_group <- function(tsne_coord, group, sample_label, k = 5)
 #' @param coord
 #' A dataframe of the two dimension t-SNE coordinates of each cell in the combined sample.
 #' @param class_label
-#' A vector of sample labels for each cell, with the same order as the tsne_coord.
+#' A vector of sample labels for each cell, with the same order as the reduction_coord.
 #' @param k
 #' K-nearest neighbours used to calculate distance. DEFAULT is 5.
 #' @return A single value of separability.
