@@ -107,7 +107,9 @@ cluster_map <- function(marker_file_list, edge_cutoff = 0.1, output, cell_num_li
 
 				sepa <- separability_pairwise(coords, group = new_group_list$comb, sample_label, k = k)
 				colnames(sepa) <- paste0(colnames(sepa), '_separability')
-				mapRes <- cbind(mapRes, sepa)
+				print(sepa)
+				mapRes <<- cbind(mapRes, sepa)
+				print(mapRes)
 			})
 			
 		}

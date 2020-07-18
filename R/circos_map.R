@@ -90,7 +90,7 @@ plot_circos <- function(cell_perc_list, pair, mapRes, col_cord, col_sample)
 	for(i in 1:nrow(pair))
 	{
 		x <- pair[i, ]
-		col <- makeTransparent(col_cord[x$regroup], round(x$similarity*100))
+		col <- makeTransparent(col_cord[x$regroup], round(x$similarity*150))
 		circos.link(x$v1, c(0, cell_perc[x$v1]), x$v2, c(0, cell_perc[x$v2]), col = col, border = NA, h.ratio = 0.5)
 	}
 	circos.clear()
