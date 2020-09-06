@@ -4,8 +4,14 @@
 \alias{recolor_comb}
 \title{recolor_comb}
 \usage{
-recolor_comb(comb_obj, new_group_list, output, comb_delim = "-",
-  color = NULL)
+recolor_comb(
+  comb_obj,
+  new_group_list,
+  output,
+  single_obj_list,
+  comb_delim = NULL,
+  color = NULL
+)
 }
 \arguments{
 \item{comb_obj}{A Seurat object for the combined sample. Cells in different samples are labelled by the sample names with the comb_delim.}

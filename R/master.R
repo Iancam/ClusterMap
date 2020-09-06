@@ -8,7 +8,6 @@
 #'
 #' A master function to perform the full workflow of ClusterMap.
 #'
-#' @import ggplot2
 #' @import pheatmap
 #' @import ape
 #' @import Seurat
@@ -106,7 +105,7 @@ cluster_map <- function(marker_file_list, edge_cutoff = 0.1, output, cell_num_li
 				# tsne_coord <- as.data.frame(comb_obj@reductions$tsne@cell.embeddings)
 
 				sepa <- separability_pairwise(coords, group = new_group_list$comb, sample_label, k = k)
-				colnames(sepa) <- paste0(colnames(sepa), '_separability')
+				colnames(sepa) <- paste0(colnames(sepa), red, '_separability')
 				print(sepa)
 				mapRes <<- cbind(mapRes, sepa)
 				print(mapRes)

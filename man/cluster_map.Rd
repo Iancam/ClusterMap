@@ -4,9 +4,17 @@
 \alias{cluster_map}
 \title{cluster_map}
 \usage{
-cluster_map(marker_file_list, edge_cutoff = 0.1, output,
-  cell_num_list = NULL, single_obj_list = NULL, comb_obj = NULL,
-  comb_delim = "-", k = 5)
+cluster_map(
+  marker_file_list,
+  edge_cutoff = 0.1,
+  output,
+  cell_num_list = NULL,
+  single_obj_list = NULL,
+  comb_obj = NULL,
+  comb_delim = NULL,
+  k = 5,
+  seurat_version = 3
+)
 }
 \arguments{
 \item{marker_file_list}{A list of csv files with names. Each file is a marker gene table for a sample. The columns named as 'cluster' and 'gene' are required.}

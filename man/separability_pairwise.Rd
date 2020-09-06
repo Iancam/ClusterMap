@@ -4,14 +4,14 @@
 \alias{separability_pairwise}
 \title{separability_pairwise}
 \usage{
-separability_pairwise(tsne_coord, group, sample_label, k = 5)
+separability_pairwise(reduction_coord, group, sample_label, k = 5)
 }
 \arguments{
-\item{tsne_coord}{A dataframe of the two dimension t-SNE coordinates of each cell in the combined sample.}
+\item{reduction_coord}{A dataframe of the two dimension t-SNE coordinates of each cell in the combined sample.}
 
-\item{group}{A vector of group assignment for each cell, with the same order as the tsne_coord.}
+\item{group}{A vector of group assignment for each cell, with the same order as the reduction_coord.}
 
-\item{sample_label}{A vector of sample labels for each cell, with the same order as the tsne_coord.}
+\item{sample_label}{A vector of sample labels for each cell, with the same order as the reduction_coord.}
 
 \item{k}{K-nearest neighbours used to calculate distance. DEFAULT is 5.}
 }

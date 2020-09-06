@@ -4,7 +4,7 @@
 \alias{recolor_s}
 \title{recolor_s}
 \usage{
-recolor_s(mapRes_sub, obj, output, color = NULL)
+recolor_s(mapRes_sub, obj, output, single_obj_list, color = NULL)
 }
 \arguments{
 \item{mapRes_sub}{A vector of the column named by the sample in the output of cluster_map_by_marker, with the regroup column as the vector name.}

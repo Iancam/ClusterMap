@@ -9,7 +9,7 @@ separability(coord, class_label, k = 5)
 \arguments{
 \item{coord}{A dataframe of the two dimension t-SNE coordinates of each cell in the combined sample.}
 
-\item{class_label}{A vector of sample labels for each cell, with the same order as the tsne_coord.}
+\item{class_label}{A vector of sample labels for each cell, with the same order as the reduction_coord.}
 
 \item{k}{K-nearest neighbours used to calculate distance. DEFAULT is 5.}
 }

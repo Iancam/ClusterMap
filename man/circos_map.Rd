@@ -4,8 +4,13 @@
 \alias{circos_map}
 \title{circos_map}
 \usage{
-circos_map(mapRes, cell_num_list, output, color_cord = NULL,
-  color_sample = NULL)
+circos_map(
+  mapRes,
+  cell_num_list,
+  output,
+  color_cord = NULL,
+  color_sample = NULL
+)
 }
 \arguments{
 \item{mapRes}{A dataframe of the output of function cluster_map_by_marker.}
