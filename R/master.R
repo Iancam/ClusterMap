@@ -7,7 +7,7 @@
 #' cluster_map
 #'
 #' A master function to perform the full workflow of ClusterMap.
-#'
+#' @import ggplot2
 #' @import pheatmap
 #' @import ape
 #' @import Seurat
